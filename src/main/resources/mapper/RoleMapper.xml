@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.moyu.paper.manager.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.cd.moyu.paper.manager.po.Role">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="roleCode" column="role_code" jdbcType="VARCHAR"/>
+            <result property="roleDesc" column="role_desc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,role_code,role_desc
+    </sql>
+    <select id="userCountPerRole" resultType="com.cd.moyu.paper.manager.dto.RoleStatistic">
+        SELECT
+            r.role_code roleCode,COUNT(u.id) userCount
+        FROM
+            role r LEFT JOIN user u
+            ON r.id = u.role_id
+        GROUP BY
+            r.id
+    </select>
+</mapper>

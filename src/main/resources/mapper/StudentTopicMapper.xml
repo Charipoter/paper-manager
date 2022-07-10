@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.moyu.paper.manager.mapper.StudentTopicMapper">
+
+    <resultMap id="BaseResultMap" type="com.cd.moyu.paper.manager.po.StudentTopic">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="studentNumber" column="stu_number" jdbcType="VARCHAR"/>
+            <result property="topicId" column="topic_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,stu_number,topic_id
+    </sql>
+</mapper>

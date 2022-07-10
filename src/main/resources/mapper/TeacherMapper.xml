@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.moyu.paper.manager.mapper.TeacherMapper">
+
+    <resultMap id="BaseResultMap" type="com.cd.moyu.paper.manager.po.Teacher">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="field" column="field" jdbcType="VARCHAR"/>
+            <result property="teacherNumber" column="tch_number" jdbcType="VARCHAR"/>
+            <result property="academicTitle" column="ac_title" jdbcType="VARCHAR"/>
+            <result property="phoneNumber" column="phone_number" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,field,
+        tch_number,ac_title,phone_number,
+        user_id
+    </sql>
+    <select id="studentCountPerTeacher" resultType="com.cd.moyu.paper.manager.dto.TeacherStatistic">
+        SELECT
+            tch.name teacherName,tch.tch_number teacherNumber,COUNT(stu.id) studentCount
+        FROM
+            teacher tch LEFT JOIN topic tpc
+            ON tch.tch_number = tpc.tch_number AND tpc.curr_number > 0
+            LEFT JOIN stu_topic st
+            ON tpc.id = st.topic_id
+            LEFT JOIN student stu
+            ON st.stu_number = stu.stu_number
+        GROUP BY
+            tch.tch_number,tch.name
+    </select>
+</mapper>

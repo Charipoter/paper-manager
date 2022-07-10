@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.moyu.paper.manager.mapper.PaperMapper">
+
+    <resultMap id="BaseResultMap" type="com.cd.moyu.paper.manager.po.Paper">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="studentNumber" column="stu_number" jdbcType="VARCHAR"/>
+            <result property="teacherNumber" column="tch_number" jdbcType="VARCHAR"/>
+            <result property="state" column="state" jdbcType="VARCHAR"/>
+            <result property="comment" column="comment" jdbcType="VARCHAR"/>
+            <result property="topicId" column="topic_id" jdbcType="INTEGER"/>
+            <result property="saveUrl" column="save_url" jdbcType="VARCHAR"/>
+            <result property="submitDate" column="submit_date" jdbcType="TIMESTAMP"/>
+            <result property="checkDate" column="check_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,stu_number,tch_number,
+        state,comment,topic_id,
+        save_url,submit_date,check_date
+    </sql>
+    <select id="pagePaperVo" parameterType="com.cd.moyu.paper.manager.dto.PaperQuery" resultType="com.cd.moyu.paper.manager.vo.PaperVo">
+        SELECT
+            IFNULL(pp.id,-1) id,st.stu_number studentNumber,stu.name studentName,st.topic_id topicId,
+            tpc.title topicTitle,IFNULL(pp.state,'未提交') state,IFNULL(pp.comment,'无') comment,
+            IFNULL(pp.submit_date,'无') submitDate
+        FROM
+            stu_topic st LEFT JOIN paper pp
+            ON st.stu_number = pp.stu_number
+            LEFT JOIN student stu
+            ON st.stu_number = stu.stu_number
+            LEFT JOIN topic tpc
+            ON st.topic_id = tpc.id
+        WHERE
+            tpc.tch_number = #{query.teacherNumber}
+            <if test="query.topicId > 0">
+                AND tpc.id = #{query.topicId}
+            </if>
+            <if test="query.studentName.length() > 0">
+                AND stu.name LIKE concat('%',#{query.studentName},'%')
+            </if>
+    </select>
+</mapper>
